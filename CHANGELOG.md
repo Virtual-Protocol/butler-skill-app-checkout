@@ -13,19 +13,38 @@
   from § 13/§ 14/§ 5 instead of restated.
 - The owner never hears about the phone. Every failure line is an errand the
   butler could not run, never a session, a rental or a switch they do not have.
-- Safety rules the bundled draft did not have:
-  - **Never issue a card for an in-app order.** `checkpoint` already prices the
-    order against the owner's purchase budget and meters it in the same ledger
-    as `acp card issue`, so paying the same order with a butler card would draw
-    that budget down twice for one meal.
-  - One checkpoint covers exactly the order it priced — a surge fee, a tip or an
-    added item is a different order and needs a fresh one.
-  - `--kind confirm` is named for irreversible non-purchases, which always ask
-    because the caps cannot size them.
-  - A total in a currency bevo-server cannot price always asks; the butler never
-    converts one itself.
-- Keywords chosen for the hub scorer, which only recommends on a distinctive
-  name or keyword hit: the app names (`grab`, `grabfood`, `foodpanda`, `shopee`,
-  `gojek`), the errands (`lunch`, `coffee`, `groceries`, `delivery`) and the
-  recovery path from a blocked website. `buy`, `sell` and `trade` are generic
-  tokens there and never qualify a skill.
+
+Rules that came out of reading the server and the shim rather than the draft they
+replaced — each one is a wrong order or a burnt approval if it is missing:
+
+- **`checkpoint` is filed with `--wait 0`.** Its default is to block for 15
+  minutes polling the approval, during which it sends the phone nothing — and
+  six idle minutes releases the phone. On any approval tapped after that, the
+  shim consumes the approval and reports "place it now" onto a device the server
+  has already taken away. File, keep the phone alive with `screen`, then claim
+  with `--approval-id <id> --wait 60`.
+- **`otp` is passed `--since`.** Without it the first poll returns the newest
+  code already in the inbox — on a second sign-in, the previous one — and
+  `--type` types it in to be rejected. The number is shared with every other
+  rail, so a stale code is always there.
+- **Every rental is a fresh phone.** `profile_ref` is read but never written
+  server-side and the pool's only tier is ephemeral, so nothing is signed in and
+  the sign-in is part of every errand. (The container's own toolbox row still
+  claims the opposite.)
+- **The checkpoint amount is the final total** — after delivery, service fee and
+  tip — not the item subtotal. Nothing downstream catches an understated one.
+- **Never issue a card for an in-app order.** `checkpoint` already put it through
+  the owner's purchase policy; a card puts the same order through it again.
+- **`--country` sets the region and a capital-city GPS fix, not the delivery
+  address.** `APP_CHECKOUT_LAT`/`APP_CHECKOUT_LON` carry the real one.
+- `tap --text` is an unanchored case-insensitive regex, so `"Allow"` also matches
+  "Don't allow"; `--nth` is 0-based; `type` goes to whatever has focus, which on
+  a fresh screen is nothing; `screen` lists only what is currently visible.
+- The pre-shopping warning names all three ways an order stops — Asks-first (the
+  default, and unrelated to price), over the per-purchase cap, over the day's
+  remainder — and never converts a local total against a USD cap.
+- Keywords chosen for the hub scorer, which only recommends on a distinctive name
+  or keyword hit: measured at 0 misses over 24 phone-app asks and 0 hijacks over
+  25 trade/read/website controls, with the browser rail still ranking first on
+  every website ask. `buy`, `sell` and `trade` are generic tokens there and never
+  qualify a skill.
