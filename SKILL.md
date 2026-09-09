@@ -125,9 +125,9 @@ Three traps worth more than the rest of this page:
    pass `--wait 0` on the first call: without it the command sits polling for 15
    minutes, sends the phone nothing, and consumes the approval on a phone the
    server has already taken away.
-9. [FIXED] **Place it once,** then read the confirmation off the app's own
-   screen — "Order placed", a driver being found — **and read the delivery time
-   there too.** It exists nowhere else.
+9. [FIXED] **Place it once** — `tap --text "^Place order"`, and never a second
+   time — then read the confirmation off the app's own screen ("Order placed", a
+   driver being found) **and the delivery time with it.** It exists nowhere else.
 10. [FIXED] **End the phone, then tell your owner.** `app-checkout end`, then
     `bevo-notify` with merchant, item, the total in the app's own currency and
     the time you just read. `end` runs even when the errand failed.
@@ -152,19 +152,20 @@ then pass that time to `otp`. Without it the first poll returns the newest code
 already in your inbox — on a second sign-in that is the *previous* code, and
 `--type` types it straight in, to be rejected. The inbox is one number shared
 with every rail, so an old code is always sitting in it.
+
 `--type` types the code for you; `otp` alone prints the digits; `--timeout`
 buys longer than the default 90 seconds. Nothing arrives? Tap "Resend" **once**,
 then stop. Never type a code you did not receive on your own number.
 
-New accounts ask for a name and for notifications: give your own name, "Skip"
-the rest.
+New accounts ask for a name and for notifications: your own name, "Skip" the
+rest.
 
 ## Idempotency and retries
 
 A placed order is real and an approval is spent when it is consumed. **Once you
 have tapped "Place order", do not re-run that step** — a second tap buys a
 second order. If you cannot tell whether it landed, `screen` and read the app's
-own order list. Never re-tap to find out.
+order list. Never re-tap to find out.
 
 One checkpoint, one tap. Once consumed the approval is gone: a second order
 needs a new one, never a reused `--approval-id`. `not_consumable` means it was
@@ -182,11 +183,11 @@ through.
 ## Failure handling
 
 - **403 `app_checkout_disabled`** — your owner has phone-app errands switched
-  off. Say the errand cannot be done, in errand terms. Never describe a phone, a
+  off. Say the errand cannot be done, in errand terms. Never name a phone, a
   session or a setting: they have no switch to go and find.
 - **429 `device_budget_exhausted`** — the phone time is used up. It is a rolling
-  24 hours, not a calendar day, so headroom returns as older minutes age out.
-  Say you will try again shortly. Do not retry now.
+  24 hours, not a calendar day, so headroom returns as older minutes age out:
+  say you will try again shortly. Do not retry now.
 - **503 `device_unconfigured`** — phones are not available here at all. Same
   answer; nothing to retry.
 - **`device_boot_failed` / `device_boot_timeout`** — `start` once more, then
