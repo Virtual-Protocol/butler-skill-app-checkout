@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.1
+
+**Trimmed to just enough context.** SKILL.md 14,234 -> 11,370 chars (-20.1%), README
+2,820 -> 2,343 (-16.9%). Explanation only — every `app-checkout`, `bevo-read`,
+`bevo-notify` and `bevo-hub` command string is byte-identical (verified by diff).
+
+- Step prose that restated the command's own flags is gone; the flags are the rule.
+- The `--wait` / `--since` behaviour is stated once instead of three times.
+
 ## 1.0.0
 
 - The phone rail as a skill. `app-checkout` — a cloud Android phone brokered by
