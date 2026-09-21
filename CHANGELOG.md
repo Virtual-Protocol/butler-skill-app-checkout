@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2
+
+Wording only: the standing-order note now says "walk through the errand once
+by hand," since the butler's earlier practice-run mode is gone. No command
+string changed.
+
 ## 1.0.1
 
 **Trimmed to just enough context.** SKILL.md 14,234 -> 11,370 chars (-20.1%), README
