@@ -15,7 +15,7 @@ Butlers on the next build.
 - `CHANGELOG.md` — one line per version; every change bumps `version` in SKILL.md
 
 No `duty.py`: this skill is `modes: ["one-off"]`. A standing order ("coffee every
-morning") is a duty built with `bevo-automation` after rehearsing the errand once.
+morning") is a duty built with `bevo-automation` after walking through the errand once by hand.
 
 ## What stays in the container
 
