@@ -17,10 +17,14 @@ written for the retired OpenClaw runtime (bevo-docker) and cannot run there.
   `tap`, `type`, `key`, `swipe`, `wait`, `install`, `open`, `checkpoint`, `end`.
   The old `app-checkout phone` / `otp --type` are gone.
 - **No params and no `bevo-hub`.** `APP_CHECKOUT_*` and `bevo-hub set/show` are
-  removed: the country and the delivery coordinates go on `start` for each
-  errand (ask the owner once, or recall the address), and the sign-in country
-  follows the number the butler signs in with. `bevo-read card-budget` is gone
-  too.
+  removed: the country goes on `start` for each errand, the delivery address
+  is typed into the app's own address search (ask the owner once, or recall
+  it — a `request_location` answer is never passed to a command), and the
+  sign-in country follows the number the butler signs in with.
+  `bevo-read card-budget` is gone too.
+- **Looking is an errand.** "Show me the ZUS menu on GrabFood" runs the same
+  steps and stops before the basket: read the menu, `end`, send the items with
+  their prices.
 - **Every in-app order asks the owner** — bevo-server stopped auto-approving on
   2026-09-21, so the budget pre-read and the `auto_approved` branch are dead.
   The checkpoint is filed without `--wait`, then claimed with
@@ -35,8 +39,8 @@ written for the retired OpenClaw runtime (bevo-docker) and cannot run there.
   country in the app's picker (+1 → United States), `bevo-sms otp --since`
   the moment "Send code" was tapped, then `app-checkout type` the code.
 - Sections follow the new skill standard: `## Procedure` replaces
-  `## Customize` and `## One-off procedure`. Body 9,146 → 9,491 chars; the
-  whole file 11,292 → 10,414, since params and routes left the frontmatter.
+  `## Customize` and `## One-off procedure`. Body 9,146 → 9,950 chars; the
+  whole file 11,292 → 10,873, since params and routes left the frontmatter.
 
 ## 1.0.2
 

@@ -10,6 +10,8 @@ metadata: {"butler":{"moneyMoving":true,"keywords":["phone app","mobile app","an
 Your owner wants an errand run **inside a phone app**: "order me lunch on
 GrabFood", "get me a ZUS coffee", "log into foodpanda for me". Use it when the
 thing only exists as an app, or when its website will not let you through.
+Looking counts too: "show me the ZUS menu on GrabFood" is the same errand,
+stopped before the basket.
 
 Not this skill: a merchant website you can use, reading a public page, buying a
 token on-chain, or a standing order ("coffee every morning") — that is a duty:
@@ -26,14 +28,15 @@ walk the errand once here, then set it up as a duty.
 - **Every in-app order asks your owner** — no auto-approval, no budget to read
   first. File the checkpoint by about minute 15 of the rental so they have
   time to answer.
-- **The delivery address:** ask your owner once (or recall it) and pass its
-  coordinates as `--lat`/`--lon` on `start`. `--country MY` only sets the
-  region; without coordinates the phone sits in the capital city.
+- **The delivery address:** ask your owner once (or recall it) for the street
+  address. You type it into the app's own delivery-address search — that is
+  what decides where the order goes. `--country MY` only sets the region, and
+  the phone starts out in the capital city until you set the address.
 
 ## Procedure
 
 ```sh
-app-checkout start --app grab --country MY --lat 3.1570 --lon 101.7120 --purpose "coffee to the office"
+app-checkout start --app grab --country MY --purpose "coffee to the office"
 app-checkout status
 app-checkout screen
 app-checkout tap 540 1210
@@ -66,9 +69,9 @@ left today and any live phone.
 1. [ADAPT] **Decide first, rent second.** Settle the app, merchant, items and
    delivery address before `start`; ask your owner once, in one question, for
    whatever you don't know.
-2. [FIXED] **Start the phone** with `--app`, `--country`, your owner's
-   `--lat`/`--lon` and a one-line `--purpose`. Note the time — the 25 minutes
-   run from here.
+2. [FIXED] **Start the phone** with `--app`, `--country` and a one-line
+   `--purpose` (`--lat`/`--lon` only if your owner gave you coordinates).
+   Note the time — the 25 minutes run from here.
 3. [ADAPT] **Make sure the app opened.** `screen`. Still on the phone's home
    screen? The app isn't installed: `app-checkout install <package>` (Grab is
    `com.grabtaxi.passenger`, ZUS is `com.coffee.love_coffee`), then
@@ -93,12 +96,15 @@ left today and any live phone.
    that time to `bevo-sms otp --since` — without it you can get an older code.
    `type` the code it prints. Nothing arrives: note a fresh time, resend once,
    then stop. A new account asks for a name — give your own, skip the rest.
-6. [ADAPT] **Build the order.** In Grab: the Food tile, the search box,
+6. [ADAPT] **Build the order.** Set the delivery address first: tap the
+   address bar at the top ("Deliver to"), `type` your owner's address, pick the
+   suggestion that matches it exactly. In Grab: the Food tile, the search box,
    `type "ZUS Coffee" --clear`, `key enter`, then the outlet your owner named
-   (else the nearest). Read the menu with `screen`, swiping for more; open the
-   item, pick its options, "Add to Basket" (some apps say "Add to Cart"), then
-   the basket. `wait --text` between screens that load; `screen` again when a
-   tap does not land.
+   (else the nearest). Read the menu with `screen`, swiping for more — if your
+   owner only wanted to see it, stop here: `end`, and send them the items with
+   their prices. Otherwise open the item, pick its options, "Add to Basket"
+   (some apps say "Add to Cart"), then the basket. `wait --text` between
+   screens that load; `screen` again when a tap does not land.
 7. [FIXED] **Check the basket.** The delivery address is your owner's. Pay by
    cash on delivery, else the method already on the account — never a new
    card. Read the **final total** — after delivery fee, service fee and tip,
