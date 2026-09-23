@@ -1,7 +1,7 @@
 ---
 name: butler-app-checkout
 description: "Run an errand inside a phone app on a cloud Android phone — sign in, work the app, and get your owner's approval before anything is paid."
-version: 2.1.2
+version: 2.1.3
 metadata: {"butler":{"moneyMoving":true,"keywords":["phone app","mobile app","in-app","android","cloud phone","errand","errands","place order","pay by card","card payment","zus","zus coffee","foodpanda","shopee","lazada","gojek","deliveroo","grabcar","grab car","grabmart","ride","ride hailing","e-hailing","taxi","book a ride","booking","groceries","log in","login","sign in","sign up","otp","sms code","verification code","2fa","captcha","bot wall","blocked"],"requires":{"bins":["app-checkout","bevo-sms","bevo-notify"]},"maxSteps":500}}
 ---
 
@@ -18,13 +18,12 @@ own approval.
 
 ## Before you start
 
-- **The phone runs on a clock.** A rental lasts at most 25 minutes, boot
-  (about 90 s) included; six idle minutes release it. `app-checkout status`
-  shows your owner's phone time left today. Every `app-checkout` command
-  keeps it alive, a checkpoint claim included.
+- **The phone runs on a clock.** A rental has a hard end — `start` and
+  `status` print it — boot (about 90 s) included; six idle minutes release
+  it. Every `app-checkout` command keeps it alive, a checkpoint claim included.
 - **Every rental is a fresh phone**: nothing signed in, nothing remembered.
 - **Every order asks your owner**, with no auto-approval. File the checkpoint
-  by about minute 15 so they have time to answer.
+  with 10 minutes of the rental left at the latest, so they can answer.
 - **Where it goes**: your owner's street address, asked once, goes on
   `start --address` (apps rank shops by the phone's GPS) and is typed into
   the app. Never pass a `request_location` answer to a command.
@@ -36,7 +35,6 @@ app-checkout start --app zus --country MY --address "Menara Ken TTDI, Kuala Lump
 app-checkout screen
 app-checkout tap --text "^Add to cart$" --nth 0
 app-checkout type "Iced Latte" --clear
-app-checkout wait --text "Checkout" --timeout 30
 app-checkout end --reason "order placed"
 ```
 
@@ -75,17 +73,20 @@ app-checkout end --reason "order placed"
    `--purpose`; `--lat`/`--lon` only if your owner gave coordinates. "still
    starting": run the same line again. "GPS set to …" or "GPS set near …":
    good. Address not found: the phone sits in the capital — type the address
-   into the app anyway, and say so if results look far. The 25 minutes run
-   from here.
+   into the app anyway, and say so if results look far.
 3. [ADAPT] **Make sure the app opened.** `screen`. The home screen means it
-   isn't installed: `app-checkout install <package>`, then
-   `app-checkout open <package>` about every 30 s, up to 4 times — `open` can
-   report success for an app that isn't there, so read its screen. "not in
-   the cloud-phone app library": download it in Chrome from an app store —
-   Huawei AppGallery (ZUS is there), Google Play or another official store —
-   or the app maker's own site; open it from Chrome's Downloads and install,
-   allowing installs from Chrome if asked. Never an APK mirror: your owner's
-   card may be typed into this app. Still missing: `end`, and say so.
+   isn't installed: `app-checkout install <package>`, then `open` 30 s later,
+   twice at most — `open` can report success for an app that isn't there, so
+   read its screen. Still the home screen: the provider's library lacks it —
+   stop retrying and get it from Huawei AppGallery (the phone has no Google
+   account, so Google Play cannot install). In Chrome, open
+   `https://appgallery.huawei.com`, search the app's name and open its page;
+   tap the address bar and `screen` — the address ends in the app id (`C`
+   and digits). Open `https://appgallery.cloud.huawei.com/appdl/<id>`, open
+   the download from Chrome's Downloads and install it, allowing installs
+   from Chrome if asked. No download: install AppGallery from the site's
+   button, open it, search the app and install it there. Never an APK mirror:
+   your owner's card may be typed into this app. Still missing: `end`.
 4. [ADAPT] **Clear the way in**: a promo or tour
    (`tap --text "^(Skip|Not now|Later|Close)$"`), then `screen`; unlabelled,
    `key back` once, else `do "close the pop-ups and reach the app's home screen"`.
@@ -149,8 +150,7 @@ app-checkout end --reason "order placed"
 
 ### Paying by card
 
-[FIXED] Your owner may pay with their own card: they send it to you, and you
-type it into the app.
+[FIXED] Your owner may pay with their own card.
 
 - **Ask at the payment screen, never before**: say the total, then "send me
   the card number, expiry and CVV — the phone waits about five minutes", and
@@ -195,7 +195,7 @@ type it into the app.
 - **Boot failed** — `start` once more, then stop.
 - **The phone is gone** mid-errand — `start` again and rebuild; if "Place
   order" may have been tapped, sign in and read the order list first.
-- **No approval as the 25 minutes run out**, or **no code after one
+- **No approval before the rental ends**, or **no code after one
   resend** — `end`, and say nothing was ordered, or that you couldn't get in.
 - **`do` comes back without what you asked**, or a screen you don't
   recognise twice — try once more, narrower, then `end` and say which errand
@@ -222,7 +222,5 @@ phone mechanics: no renting, tapping, agents or sessions.
 
 - Waiting (then keep claiming): "Your ZUS order — RM 32.50 at ZUS Coffee
   TTDI — is waiting in your Approvals."
-- Switched off: "I can't place app orders right now — want me to find another
-  way to get it?"
 - Out of time: "I can't run that errand just now — let's try again a bit
   later."

@@ -15,8 +15,8 @@ skill's app step tells the butler to follow such a skill when it is loaded.
 What it teaches the butler, in order: settle the errand with the owner before
 renting a phone (what to get, and the delivery or pickup address — the phone's
 GPS is set there with `start --address`); install an app the phone provider's
-library lacks from an app store in Chrome (Huawei AppGallery, Google Play, the
-maker's own site — never an APK mirror); sign up or sign in on its **own** number
+library lacks from Huawei AppGallery through Chrome (the phone has no
+Google account for Google Play; never an APK mirror); sign up or sign in on its **own** number
 (`bevo-sms number`, codes from `bevo-sms otp`); work unlabelled screens through
 `do`; and pay the way the owner chooses — cash, a saved method, or the owner's
 own card, asked for only at the payment screen and typed only into that app's
