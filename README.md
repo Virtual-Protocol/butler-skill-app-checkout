@@ -1,6 +1,6 @@
 # butler-app-checkout
 
-Run an errand inside a phone app — GrabFood, Grab, foodpanda, anything that only
+Run an errand inside a phone app — Grab (Food, Mart, rides), foodpanda, anything that only
 exists as an app or whose website will not let a butler through — on a cloud
 Android phone that bevo-server rents by the minute, with the owner's approval
 before anything is paid.

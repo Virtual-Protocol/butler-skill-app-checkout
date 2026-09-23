@@ -22,7 +22,7 @@ written for the retired OpenClaw runtime (bevo-docker) and cannot run there.
   it — a `request_location` answer is never passed to a command), and the
   sign-in country follows the number the butler signs in with.
   `bevo-read card-budget` is gone too.
-- **Looking is an errand.** "Show me the ZUS menu on GrabFood" runs the same
+- **Looking is an errand.** "Show me the ZUS menu on Grab" runs the same
   steps and stops before the basket: read the menu, `end`, send the items with
   their prices.
 - **Every in-app order asks the owner** — bevo-server stopped auto-approving on
@@ -31,7 +31,8 @@ written for the retired OpenClaw runtime (bevo-docker) and cannot run there.
   `--approval-id <id> --wait 90`, repeated until approved or declined (each
   claim keeps the phone alive), and filed by about minute 15 of the 25-minute
   rental. An approval never moves to a new phone.
-- **Grab first.** The procedure walks GrabFood → ZUS Coffee end to end, names
+- **Grab first.** Grab is a super-app, so the procedure walks its Food section
+  ("Search food", or Delivery / "Self Pick-Up") → ZUS Coffee end to end, names
   the Grab and ZUS packages, and handles a missing app: `install`, then `open`
   every ~30 s up to 4 times, because `open` can report success for an app that
   is not there.
@@ -39,8 +40,8 @@ written for the retired OpenClaw runtime (bevo-docker) and cannot run there.
   country in the app's picker (+1 → United States), `bevo-sms otp --since`
   the moment "Send code" was tapped, then `app-checkout type` the code.
 - Sections follow the new skill standard: `## Procedure` replaces
-  `## Customize` and `## One-off procedure`. Body 9,146 → 9,950 chars; the
-  whole file 11,292 → 10,873, since params and routes left the frontmatter.
+  `## Customize` and `## One-off procedure`. Body 9,146 → 10,238 chars; the
+  whole file 11,292 → 11,170, since params and routes left the frontmatter.
 
 ## 1.0.2
 

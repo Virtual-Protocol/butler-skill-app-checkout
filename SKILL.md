@@ -1,6 +1,6 @@
 ---
 name: butler-app-checkout
-description: "Order, book or sign in inside a phone app — GrabFood, Grab, foodpanda — on a cloud Android phone, with your owner's approval before anything is paid."
+description: "Order, book or sign in inside a phone app — Grab (Food, Mart, rides), foodpanda — on a cloud Android phone, with your owner's approval before anything is paid."
 version: 2.0.0
 metadata: {"butler":{"moneyMoving":true,"keywords":["phone app","mobile app","android","in-app","app only","order food","order lunch","order dinner","order breakfast","lunch","dinner","breakfast","coffee","meal","food delivery","delivery","takeaway","restaurant","groceries","grocery run","errand","errands","place order","cash on delivery","grab","grabfood","grabmart","grabcar","foodpanda","shopee","lazada","gojek","deliveroo","ride","ride hailing","e-hailing","taxi","booking","book a ride","book a table","log in","login","sign in","sign up","account","otp","sms code","verification code","two-factor","2fa","captcha","bot wall","blocked"],"requires":{"bins":["app-checkout","bevo-sms","bevo-notify"]}}}
 ---
@@ -8,9 +8,9 @@ metadata: {"butler":{"moneyMoving":true,"keywords":["phone app","mobile app","an
 ## When to use
 
 Your owner wants an errand run **inside a phone app**: "order me lunch on
-GrabFood", "get me a ZUS coffee", "log into foodpanda for me". Use it when the
+Grab", "get me a ZUS coffee", "log into foodpanda for me". Use it when the
 thing only exists as an app, or when its website will not let you through.
-Looking counts too: "show me the ZUS menu on GrabFood" is the same errand,
+Looking counts too: "show me the ZUS menu on Grab" is the same errand,
 stopped before the basket.
 
 Not this skill: a merchant website you can use, reading a public page, buying a
@@ -96,15 +96,18 @@ left today and any live phone.
    that time to `bevo-sms otp --since` — without it you can get an older code.
    `type` the code it prints. Nothing arrives: note a fresh time, resend once,
    then stop. A new account asks for a name — give your own, skip the rest.
-6. [ADAPT] **Build the order.** Set the delivery address first: tap the
-   address bar at the top ("Deliver to"), `type` your owner's address, pick the
-   suggestion that matches it exactly. In Grab: the Food tile, the search box,
-   `type "ZUS Coffee" --clear`, `key enter`, then the outlet your owner named
-   (else the nearest). Read the menu with `screen`, swiping for more — if your
-   owner only wanted to see it, stop here: `end`, and send them the items with
-   their prices. Otherwise open the item, pick its options, "Add to Basket"
-   (some apps say "Add to Cart"), then the basket. `wait --text` between
-   screens that load; `screen` again when a tap does not land.
+6. [ADAPT] **Build the order.** Grab is a super-app: food is its **Food**
+   section, not an app of its own — tap "Search food" at the top of its home
+   screen (or the Food tile). Delivery: set the address first — the address bar
+   at the top ("Deliver to"), `type` your owner's address, pick the suggestion
+   that matches it exactly. Pickup: switch to the pickup mode ("Self Pick-Up")
+   instead, and no address is needed. Then `type "ZUS Coffee" --clear`,
+   `key enter`, and open the outlet your owner named (else the nearest). Read
+   the menu with `screen`, swiping for more — if your owner only wanted to see
+   it, stop here: `end`, and send them the items with their prices. Otherwise
+   open the item, pick its options, "Add to Basket" (some apps say "Add to
+   Cart"), then the basket. `wait --text` between screens that load; `screen`
+   again when a tap does not land.
 7. [FIXED] **Check the basket.** The delivery address is your owner's. Pay by
    cash on delivery, else the method already on the account — never a new
    card. Read the **final total** — after delivery fee, service fee and tip,
@@ -114,14 +117,14 @@ left today and any live phone.
    can't be undone is tapped before this comes back approved:
 
    ```sh
-   app-checkout checkpoint --kind order --app "GrabFood" --merchant "ZUS Coffee KLCC" --summary "2x Iced Americano to the office" --amount 32.50 --currency MYR
+   app-checkout checkpoint --kind order --app "Grab" --merchant "ZUS Coffee KLCC" --summary "2x Iced Americano to the office" --amount 32.50 --currency MYR
    app-checkout checkpoint --approval-id <id> --wait 90
    ```
 
    The first line files it and prints an approval id; your owner gets a push
    to approve it. Then claim with the second line, again each time it comes
-   back still waiting, until it says approved or declined — each claim keeps
-   the phone alive. `--app` here is the name your owner sees. Declined: `end`,
+   back still waiting, until it says approved or declined — **in this same
+   turn**: each claim keeps the phone alive, and ending your turn lets it go. `--app` here is the name your owner sees. Declined: `end`,
    and tell your owner nothing was ordered.
 9. [FIXED] **Place it once.** If the total moved since the checkpoint, file a
    new one instead. Otherwise `tap --text "^Place order"` — once — and read
@@ -132,7 +135,7 @@ left today and any live phone.
 
     ```sh
     app-checkout end --reason "order placed"
-    bevo-notify "Your ZUS Coffee order is placed on GrabFood: 2x Iced Americano, RM 32.50 cash on delivery, arriving about 9:40am."
+    bevo-notify "Your ZUS Coffee order is placed on Grab: 2x Iced Americano, RM 32.50 cash on delivery, arriving about 9:40am."
     ```
 
     `end` runs on every path, even after a failure.
@@ -190,8 +193,8 @@ left today and any live phone.
 Speak in errands — "ordering your coffee", "your order is placed" — never in
 phone mechanics: no renting, tapping or sessions.
 
-- Waiting: "Your GrabFood order — RM 32.50 at ZUS Coffee KLCC — is waiting in
-  your Approvals."
+- Waiting (say it, then keep claiming in the same turn): "Your Grab order —
+  RM 32.50 at ZUS Coffee KLCC — is waiting in your Approvals."
 - Switched off: "I can't place app orders right now — want me to find another
   way to get it?"
 - Out of time today: "I can't run that errand just now — let's try again a bit
