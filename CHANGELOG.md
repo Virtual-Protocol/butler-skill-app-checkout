@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.1.3
+
+- **An app the phone provider's library lacks comes from Huawei AppGallery,
+  and fast.** Measured 2026-09-23 on the live hub: a fresh-phone errand retried
+  the library install for ~12 minutes (every attempt reports "queued") and ran
+  out of rental before it reached the app. Now: the library gets two tries,
+  then the butler goes to AppGallery — the phone has no Google account, so
+  Google Play cannot install — reads the app id off the app's page and
+  downloads it directly (`appgallery.cloud.huawei.com/appdl/<id>`), else
+  installs the AppGallery app and installs from there. General store
+  mechanics for any app; no app-specific link. Never an APK mirror.
+- **The rental's end is what `start` and `status` print**, not a fixed 25
+  minutes (bevo-server raised the ceiling to 45).
+
 ## 2.1.2
 
 - **An app the phone provider's library lacks comes from an app store in
