@@ -1,8 +1,8 @@
 ---
 name: butler-app-checkout
 description: "Run an errand inside a phone app on a cloud Android phone — sign in, work the app, and get your owner's approval before anything is paid."
-version: 2.1.1
-metadata: {"butler":{"moneyMoving":true,"keywords":["phone app","mobile app","in-app","android","cloud phone","errand","errands","place order","pay by card","card payment","zus","zus coffee","foodpanda","shopee","lazada","gojek","deliveroo","grabcar","grab car","grabmart","ride","ride hailing","e-hailing","taxi","book a ride","booking","groceries","log in","login","sign in","sign up","otp","sms code","verification code","2fa","captcha","bot wall","blocked"],"requires":{"bins":["app-checkout","bevo-sms","bevo-notify"]},"maxSteps":150}}
+version: 2.1.2
+metadata: {"butler":{"moneyMoving":true,"keywords":["phone app","mobile app","in-app","android","cloud phone","errand","errands","place order","pay by card","card payment","zus","zus coffee","foodpanda","shopee","lazada","gojek","deliveroo","grabcar","grab car","grabmart","ride","ride hailing","e-hailing","taxi","book a ride","booking","groceries","log in","login","sign in","sign up","otp","sms code","verification code","2fa","captcha","bot wall","blocked"],"requires":{"bins":["app-checkout","bevo-sms","bevo-notify"]},"maxSteps":500}}
 ---
 
 ## When to use
@@ -81,10 +81,11 @@ app-checkout end --reason "order placed"
    isn't installed: `app-checkout install <package>`, then
    `app-checkout open <package>` about every 30 s, up to 4 times — `open` can
    report success for an app that isn't there, so read its screen. "not in
-   the cloud-phone app library": download it from its official store in
-   Chrome (Google Play, or Huawei AppGallery's site for ZUS), open it from
-   Chrome's Downloads and install, allowing installs from Chrome if asked —
-   never from a mirror. Still missing: `end`, and say it couldn't be installed.
+   the cloud-phone app library": download it in Chrome from an app store —
+   Huawei AppGallery (ZUS is there), Google Play or another official store —
+   or the app maker's own site; open it from Chrome's Downloads and install,
+   allowing installs from Chrome if asked. Never an APK mirror: your owner's
+   card may be typed into this app. Still missing: `end`, and say so.
 4. [ADAPT] **Clear the way in**: a promo or tour
    (`tap --text "^(Skip|Not now|Later|Close)$"`), then `screen`; unlabelled,
    `key back` once, else `do "close the pop-ups and reach the app's home screen"`.
@@ -104,10 +105,11 @@ app-checkout end --reason "order placed"
    your own. On an unlabelled sign-in screen, `do` may only read where the
    fields and buttons are.
 6. [ADAPT] **Do the errand in the app** — follow a loaded skill for this app
-   (butler-grabfood for food on Grab) if there is one, keeping every rule
-   here; otherwise work it from `screen`, with `do` where there are no labels. Browsing stops before the basket: read what your owner asked
-   about, `end`, and send it. `wait --text` between screens that load;
-   `screen` again when a tap does not land.
+   if there is one, keeping every rule here; otherwise work it from
+   `screen`, with `do` where there are no labels. Browsing stops before the
+   basket: read what your owner asked about, `end`, and send it.
+   `wait --text` between screens that load; `screen` again when a tap does
+   not land.
 7. [FIXED] **Check the checkout.** The delivery address is your owner's. Pay
    by cash, else the method already on the account; neither, or your owner
    asked to pay by card: ask for their card now (Paying by card) and enter it

@@ -8,11 +8,19 @@ the owner's approval before anything is paid.
 This is the **generic** phone-app playbook, and every app skill builds on it:
 the phone's clock, starting the phone at the owner's address, making sure the
 app opened, signing in on the butler's own number, reading the screen, and
-every money rule live here. An app skill — today
-[butler-grabfood](https://github.com/Virtual-Protocol/butler-skill-grabfood),
-for food on Grab — declares this one in `metadata.butler.requires.skills` and
-carries only that app's steps; this skill's app step tells the butler to follow
-such a skill when it is loaded.
+every money rule live here. A skill for one app declares this one in
+`metadata.butler.requires.skills` and carries only that app's steps; this
+skill's app step tells the butler to follow such a skill when it is loaded.
+
+What it teaches the butler, in order: settle the errand with the owner before
+renting a phone (what to get, and the delivery or pickup address — the phone's
+GPS is set there with `start --address`); install an app the phone provider's
+library lacks from an app store in Chrome (Huawei AppGallery, Google Play, the
+maker's own site — never an APK mirror); sign up or sign in on its **own** number
+(`bevo-sms number`, codes from `bevo-sms otp`); work unlabelled screens through
+`do`; and pay the way the owner chooses — cash, a saved method, or the owner's
+own card, asked for only at the payment screen and typed only into that app's
+card form — after an approval the owner gives for every order.
 
 One Butler skill, published by the
 [Butler skill hub](https://github.com/Virtual-Protocol/butler-skills): the hub's
@@ -38,7 +46,8 @@ forwarder to bevo-server's phone rental (`/butler-exec/device-session*` and
 device id never reach the container, which holds only a numeric session id — and
 files every in-app order as an owner approval. The same command sets the phone's
 GPS from a street address (`start --address`, geocoded with OpenStreetMap),
-grants an app its permissions (`open`, `grant`), and hands navigation on a screen
+grants an app notifications ahead of time (`grant`; the provider refuses a
+location grant, so a location prompt is tapped), and hands navigation on a screen
 with no accessibility labels to the phone provider's own vision agent (`do`),
 which is told never to order, pay, sign in or type a code. `bevo-sms` (the
 butler's own number and its sign-in codes) and `bevo-notify` are container
@@ -63,7 +72,3 @@ same check through the hub's composite action (`.github/workflows/validate.yml`)
   with:
     maintainer: "true"
 ```
-
-`do` and `grant` appear in `SKILL.md` prose only, not in a shell block: the
-validator checks every shell-block command against its `app-checkout`
-subcommand table, which does not list them yet.

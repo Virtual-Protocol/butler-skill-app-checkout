@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.1.2
+
+- **An app the phone provider's library lacks comes from an app store in
+  Chrome** — Huawei AppGallery (where ZUS is), Google Play, another official
+  store, or the maker's own site; never an APK mirror, because the owner's card
+  may be typed into the app.
+- **`maxSteps` 500** (was 150), in line with the butler's generous default step
+  limits (owner, 2026-09-23: "we don't want to stop innovation with these
+  limitations").
+- The app step names no particular app skill; it follows whichever is loaded.
+
 ## 2.1.1
 
 - **The card is asked for at the payment screen, never before renting the
