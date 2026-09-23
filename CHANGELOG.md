@@ -1,5 +1,43 @@
 # Changelog
 
+## 2.0.0
+
+**Breaking: rewritten for the Mastra butler (`virtuals-agent`).** 1.0.2 was
+written for the retired OpenClaw runtime (bevo-docker) and cannot run there.
+
+- **The description is a quoted string.** 1.0.2's unquoted description held
+  `phone: SMS`, which is not valid YAML, so gray-matter (Mastra's parser)
+  rejected the frontmatter and Mastra dropped the skill without an error.
+  Frontmatter is now `name`, `description` (≤ 200 chars), `version` and a
+  one-line `metadata` carrying `butler` alone: `moneyMoving`, the keyword list
+  unchanged, `requires.bins` = `app-checkout`, `bevo-sms`, `bevo-notify`. The
+  `openclaw` block, `tier`, `modes`, `routes` and `params` are gone.
+- **The container's `app-checkout` grammar:** `start --app grab|zus|<package>`
+  with `--country`, `--lat`/`--lon` and `--purpose`; `status`, `screen`, `shot`,
+  `tap`, `type`, `key`, `swipe`, `wait`, `install`, `open`, `checkpoint`, `end`.
+  The old `app-checkout phone` / `otp --type` are gone.
+- **No params and no `bevo-hub`.** `APP_CHECKOUT_*` and `bevo-hub set/show` are
+  removed: the country and the delivery coordinates go on `start` for each
+  errand (ask the owner once, or recall the address), and the sign-in country
+  follows the number the butler signs in with. `bevo-read card-budget` is gone
+  too.
+- **Every in-app order asks the owner** — bevo-server stopped auto-approving on
+  2026-09-21, so the budget pre-read and the `auto_approved` branch are dead.
+  The checkpoint is filed without `--wait`, then claimed with
+  `--approval-id <id> --wait 90`, repeated until approved or declined (each
+  claim keeps the phone alive), and filed by about minute 15 of the 25-minute
+  rental. An approval never moves to a new phone.
+- **Grab first.** The procedure walks GrabFood → ZUS Coffee end to end, names
+  the Grab and ZUS packages, and handles a missing app: `install`, then `open`
+  every ~30 s up to 4 times, because `open` can report success for an app that
+  is not there.
+- **Sign-in on the butler's own number:** `bevo-sms number`, the matching
+  country in the app's picker (+1 → United States), `bevo-sms otp --since`
+  the moment "Send code" was tapped, then `app-checkout type` the code.
+- Sections follow the new skill standard: `## Procedure` replaces
+  `## Customize` and `## One-off procedure`. Body 9,146 → 9,491 chars; the
+  whole file 11,292 → 10,414, since params and routes left the frontmatter.
+
 ## 1.0.2
 
 Wording only: the standing-order note now says "walk through the errand once
