@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.1.0
+
+- **Your owner can pay with their own card** (owner's call, 2026-09-23: "the
+  skill should not block user from entering card for purchase"). 2.0.0
+  refused every card and ended the errand when an app took neither cash nor a
+  saved method. Now the butler asks for the card in the chat before renting
+  the phone and types it only into that app's card form. It never hands the
+  card to `do`, never repeats it ("card ending 1234"), unticks "save card",
+  pays only after the checkpoint is approved, and leaves the bank's
+  confirmation to the owner.
+- **An app missing from the cloud phone's app library installs from its
+  official store in Chrome.** `install` now answers "not in the cloud-phone
+  app library" (it used to read as a lost phone, and the server orphaned the
+  phone). ZUS comes from Huawei AppGallery's own download; never a mirror.
+- **Permission prompts are tapped, not pre-granted.** The provider refuses
+  location grants (422, measured 2026-09-23), so `open` no longer claims to
+  grant location; `grant` is for notifications.
+- The daily phone time is an allowance `status` reports, not a fixed 60
+  minutes; `device_pool_busy` (every phone in use) is "try a bit later".
+
 ## 2.0.0
 
 **Breaking: rewritten for the Mastra butler (`virtuals-agent`), as the generic
