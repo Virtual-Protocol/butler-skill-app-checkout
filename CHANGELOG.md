@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.1.1
+
+- **The card is asked for at the payment screen, never before renting the
+  phone** (owner, 2026-09-23). Cash, else the method already on the account;
+  with neither, or when the owner asked to pay by card, the butler says the
+  total, asks for the card and ends its turn — the phone waits about five
+  minutes. On the reply it loads this skill again (a new turn starts at the
+  default step limit) and carries on from `screen`, or restarts and rebuilds
+  if the phone was released.
+
 ## 2.1.0
 
 - **Your owner can pay with their own card** (owner's call, 2026-09-23: "the

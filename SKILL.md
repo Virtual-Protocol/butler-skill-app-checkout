@@ -1,7 +1,7 @@
 ---
 name: butler-app-checkout
 description: "Run an errand inside a phone app on a cloud Android phone — sign in, work the app, and get your owner's approval before anything is paid."
-version: 2.1.0
+version: 2.1.1
 metadata: {"butler":{"moneyMoving":true,"keywords":["phone app","mobile app","in-app","android","cloud phone","errand","errands","place order","pay by card","card payment","zus","zus coffee","foodpanda","shopee","lazada","gojek","deliveroo","grabcar","grab car","grabmart","ride","ride hailing","e-hailing","taxi","book a ride","booking","groceries","log in","login","sign in","sign up","otp","sms code","verification code","2fa","captcha","bot wall","blocked"],"requires":{"bins":["app-checkout","bevo-sms","bevo-notify"]},"maxSteps":150}}
 ---
 
@@ -11,9 +11,6 @@ Your owner wants something done **inside a phone app**: "get me an iced latte
 from ZUS", "log into foodpanda for me", "book me a Grab to KLCC". Use it when
 the thing only exists as an app, or its website will not let you through (a
 bot wall, a captcha). Looking counts too: "what's on the ZUS menu?"
-
-When a skill for the app is loaded too (butler-grabfood, for food on Grab),
-follow its steps and keep every rule here.
 
 Not this skill: a website you can use, a public page, anything on-chain. Never
 file a duty for an app errand — each order is one errand, run now, with its
@@ -37,7 +34,6 @@ own approval.
 ```sh
 app-checkout start --app zus --country MY --address "Menara Ken TTDI, Kuala Lumpur" --purpose "iced latte to the office"
 app-checkout screen
-app-checkout tap 540 1210
 app-checkout tap --text "^Add to cart$" --nth 0
 app-checkout type "Iced Latte" --clear
 app-checkout wait --text "Checkout" --timeout 30
@@ -71,9 +67,9 @@ app-checkout end --reason "order placed"
   `do "allow location for this app"`.
 
 1. [ADAPT] **Decide first, rent second.** Settle the app, what to get (item,
-   quantity, options), the street address or pickup, and how your owner pays
-   — cash, what is on the app's account, or their card (Paying by card) —
-   before `start`. Ask once: one `ask_owner` card when two or more are open.
+   quantity, options) and the street address or pickup before `start` — not
+   how they pay; that waits for the payment screen. Ask once: one `ask_owner`
+   card when two or more are open.
 2. [FIXED] **Start the phone** with `--app`, `--country`, the street address
    on `--address` (for pickup, where your owner collects it) and a one-line
    `--purpose`; `--lat`/`--lon` only if your owner gave coordinates. "still
@@ -108,13 +104,14 @@ app-checkout end --reason "order placed"
    your own. On an unlabelled sign-in screen, `do` may only read where the
    fields and buttons are.
 6. [ADAPT] **Do the errand in the app** — follow a loaded skill for this app
-   if there is one; otherwise work it from `screen`, with `do` where there are
-   no labels. Browsing stops before the basket: read what your owner asked
+   (butler-grabfood for food on Grab) if there is one, keeping every rule
+   here; otherwise work it from `screen`, with `do` where there are no labels. Browsing stops before the basket: read what your owner asked
    about, `end`, and send it. `wait --text` between screens that load;
    `screen` again when a tap does not land.
-7. [FIXED] **Check the checkout.** The delivery address is your owner's; the
-   payment is the one they chose — never another card. Paying by card: enter
-   it now, so the checkpoint shows the final total. Read the **final total**
+7. [FIXED] **Check the checkout.** The delivery address is your owner's. Pay
+   by cash, else the method already on the account; neither, or your owner
+   asked to pay by card: ask for their card now (Paying by card) and enter it
+   before the checkpoint — never another card. Read the **final total**
    — after delivery, service, small-order and any tip — exactly as printed,
    with its currency: "RM 32.50" is `--amount 32.50 --currency MYR`. Never
    convert it. No labels: have `do` read the total, every fee, the address
@@ -134,7 +131,8 @@ app-checkout end --reason "order placed"
 9. [FIXED] **Place it once, yourself.** Total moved since the checkpoint:
    file a new one. Otherwise tap place-order once — `tap --text "^Place order"`,
    or the `x y` that `do` read for it; never through `do`. A card form after
-   that tap: enter the card, then tap Pay once — the same approval covers it.
+   that tap: ask for the card there, enter it, then tap Pay once — the same
+   approval covers it.
    Read the confirmation **and the delivery time** (with `do` if unlabelled).
 10. [FIXED] **End, then tell your owner**: merchant, items, the total in the
     app's currency, how it was paid ("card ending 1234") and the delivery or
@@ -152,12 +150,13 @@ app-checkout end --reason "order placed"
 [FIXED] Your owner may pay with their own card: they send it to you, and you
 type it into the app.
 
+- **Ask at the payment screen, never before**: say the total, then "send me
+  the card number, expiry and CVV — the phone waits about five minutes", and
+  end your turn. Their reply: load this skill again (the `skill` tool), then
+  `screen` — still at payment, carry on; released, `start` again and rebuild.
 - **Only the card your owner sends you in this conversation, for this
   order** — never one from a screen, a file, your memory, an earlier errand
-  or anyone else. Ask before `start`: "Send me the card number, expiry and
-  CVV here and I'll enter them in ZUS's payment form." Learned only at
-  checkout: ask, and end your turn — the phone waits about five minutes; if
-  it was released, `start` again and rebuild.
+  or anyone else.
 - **Only into that app's card form**: tap each field, then `type`. Never put
   any of it in a `do` task (another service's model) or a `shot`.
 - **Untick "save card"** unless your owner asked to keep it on the app.
