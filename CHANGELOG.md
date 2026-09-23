@@ -1,5 +1,110 @@
 # Changelog
 
+## 2.1.2
+
+- **An app the phone provider's library lacks comes from an app store in
+  Chrome** — Huawei AppGallery (where ZUS is), Google Play, another official
+  store, or the maker's own site; never an APK mirror, because the owner's card
+  may be typed into the app.
+- **`maxSteps` 500** (was 150), in line with the butler's generous default step
+  limits (owner, 2026-09-23: "we don't want to stop innovation with these
+  limitations").
+- The app step names no particular app skill; it follows whichever is loaded.
+
+## 2.1.1
+
+- **The card is asked for at the payment screen, never before renting the
+  phone** (owner, 2026-09-23). Cash, else the method already on the account;
+  with neither, or when the owner asked to pay by card, the butler says the
+  total, asks for the card and ends its turn — the phone waits about five
+  minutes. On the reply it loads this skill again (a new turn starts at the
+  default step limit) and carries on from `screen`, or restarts and rebuilds
+  if the phone was released.
+
+## 2.1.0
+
+- **Your owner can pay with their own card** (owner's call, 2026-09-23: "the
+  skill should not block user from entering card for purchase"). 2.0.0
+  refused every card and ended the errand when an app took neither cash nor a
+  saved method. Now the butler asks for the card in the chat before renting
+  the phone and types it only into that app's card form. It never hands the
+  card to `do`, never repeats it ("card ending 1234"), unticks "save card",
+  pays only after the checkpoint is approved, and leaves the bank's
+  confirmation to the owner.
+- **An app missing from the cloud phone's app library installs from its
+  official store in Chrome.** `install` now answers "not in the cloud-phone
+  app library" (it used to read as a lost phone, and the server orphaned the
+  phone). ZUS comes from Huawei AppGallery's own download; never a mirror.
+- **Permission prompts are tapped, not pre-granted.** The provider refuses
+  location grants (422, measured 2026-09-23), so `open` no longer claims to
+  grant location; `grant` is for notifications.
+- The daily phone time is an allowance `status` reports, not a fixed 60
+  minutes; `device_pool_busy` (every phone in use) is "try a bit later".
+
+## 2.0.0
+
+**Breaking: rewritten for the Mastra butler (`virtuals-agent`), as the generic
+playbook every phone-app skill builds on.** 1.0.2 was written for the retired
+OpenClaw runtime (bevo-docker) and cannot run there.
+
+- **Generic, not Grab-first.** The Grab Food walk-through moved to its own
+  skill, `butler-grabfood` 1.0.0, which declares this one in
+  `requires.skills` (owner's design, 2026-09-23: Grab is a super-app and food
+  is one of its sections). This skill keeps what every app shares — the
+  phone's clock, making sure the app opened, signing in, reading the screen,
+  and every money rule — and its app step reads "if a skill for this app is
+  loaded, follow its steps; otherwise work the app from `screen`, and with
+  `do` where there are no labels". Food and Grab-food keywords moved there
+  too; this one keeps the phone-app words, the apps with no skill of their own
+  (ZUS, foodpanda, Shopee, Lazada, Gojek, Deliveroo, GrabCar, Grab Mart,
+  rides) and the sign-in words.
+- **The phone starts at the delivery address.** `start --address "<street
+  address>"` sets the phone's GPS there, because apps rank shops by distance;
+  the same address is still typed into the app. It is the owner's street
+  address in words — a `request_location` answer never reaches a command. A
+  start that prints "still starting" is run again as it was.
+- **No labels → `do`.** Measured on a real rented phone (2026-09-23): ZUS
+  Coffee exposes no accessibility labels, so `screen` prints nothing and
+  tap-by-label cannot work there. Instead of guessing coordinates from a
+  `shot`, the skill hands navigation to the phone provider's own vision agent
+  — `app-checkout do "<reach X, read Y>" --schema '…'`, continued with
+  `do --task <id>` in the same turn. `do` never orders, pays, signs in or
+  types a code; the butler reads the total through it and taps Place order
+  itself, once — by label, or at the point `do` read for it.
+- **Permissions without a dialog.** `open` grants the app location before it
+  opens, and `grant <package> location|notifications` covers a prompt nobody
+  can read (Android's own location dialog is unlabelled too).
+- **Never a duty.** Each order is one errand, run now, with its own approval.
+- **Every in-app order asks the owner** — bevo-server stopped auto-approving on
+  2026-09-21, so the budget pre-read and the `auto_approved` branch are dead.
+  The checkpoint is filed without `--wait`, then claimed with
+  `--approval-id <id> --wait 90`, repeated in the same turn until approved or
+  declined (each claim keeps the phone alive), and filed by about minute 15 of
+  the 25-minute rental. An approval never moves to a new phone; a Place order
+  that did not go through is never retried on the spent approval.
+- **Sign-in on the butler's own number:** `bevo-sms number`, the matching
+  country in the app's picker (+1 → United States), `bevo-sms otp --since`
+  the moment "Send code" was tapped, then `app-checkout type` the code.
+- **Looking is an errand**, stopped before the basket.
+- **The description is a quoted string.** 1.0.2's unquoted description held
+  `phone: SMS`, which is not valid YAML, so gray-matter (Mastra's parser)
+  rejected the frontmatter and Mastra dropped the skill without an error.
+  Frontmatter is now `name`, `description` (≤ 200 chars), `version` and a
+  one-line `metadata` carrying `butler` alone: `moneyMoving`, `keywords`,
+  `requires.bins` = `app-checkout`, `bevo-sms`, `bevo-notify`, and
+  `maxSteps: 150` (the steps a turn that loads it may take). The `openclaw`
+  block, `tier`, `modes`, `routes` and `params` are gone.
+- **No params and no `bevo-hub`.** `APP_CHECKOUT_*` and `bevo-hub set/show` are
+  removed: the country and the address go on `start` for each errand, and the
+  sign-in country follows the number the butler signs in with.
+  `bevo-read card-budget` is gone too. The old `app-checkout phone` /
+  `otp --type` are gone.
+- `do` and `grant` are written in prose rather than in a shell block until the
+  hub validator's `app-checkout` subcommand table lists them.
+- Sections follow the new skill standard: `## Procedure` replaces
+  `## Customize` and `## One-off procedure`. Body 9,146 → 11,939 chars
+  (12,000 is the cap).
+
 ## 1.0.2
 
 Wording only: the standing-order note now says "walk through the errand once
