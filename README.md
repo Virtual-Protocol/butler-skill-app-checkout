@@ -32,6 +32,9 @@ merge here reaches butlers on the next hub build.
 
 - `SKILL.md` — the playbook: frontmatter plus the standard sections (see the hub's
   [SKILL_STANDARD.md](https://github.com/Virtual-Protocol/butler-skills/blob/main/SKILL_STANDARD.md))
+- `references/appgallery.md` — installing an app the phone provider's library
+  lacks, from Huawei AppGallery; published with `SKILL.md`, read only when step 3
+  needs it
 - `CHANGELOG.md` — one entry per version; every change bumps `version` in SKILL.md
 
 No `duty.py`, and the butler never files a duty for an app errand: each order
