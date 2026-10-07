@@ -1,5 +1,31 @@
 # Changelog
 
+## 2.1.4
+
+Measured 2026-10-07 on a local butler ordering KOI Thé from GrabFood (Malaysia);
+four runs, about 25 minutes each, none reaching the basket.
+
+- **Tap the input, not its label.** The butler tapped `Name`, which left the
+  cursor in Email, so `type --clear` overwrote the email with the name; Grab
+  answered "Please check the email format" four times over. Now: tap the `*`
+  line, and `screen` again after an error line shifts the fields.
+- **Escape regex characters in `tap --text`.** `"^What should people call you?$"`
+  never matched its own label — the `?` made the `u` optional. Now: escape
+  `? . ( ) +`.
+- **Labelled screens use `tap && screen`, not `do`.** A `do` search took
+  several 100-second polls where three taps would have done.
+- **Search, never scroll a feed; read a chain's branches off one list.** The
+  butler scrolled GrabFood's promoted feed for three minutes, then opened
+  closed outlets one by one.
+- **Sign-in: log in to the number's existing account; sign up with your own
+  email.** The butler made up addresses on real domains
+  (`butlerbot@grabtest.com`) — whoever owns the domain gets the account's mail.
+  Now it uses its own ACP inbox (`acp email whoami --json`), or asks its owner
+  when it has no `acp`; it is named in prose, not `requires.bins`, so a butler
+  without ACP can still install the skill.
+- **The AppGallery install moved to `references/appgallery.md`** to keep the
+  body under its 12,000-character limit; step 3 points to it.
+
 ## 2.1.3
 
 - **An app the phone provider's library lacks comes from Huawei AppGallery,

@@ -1,7 +1,7 @@
 ---
 name: butler-app-checkout
 description: "Run an errand inside a phone app on a cloud Android phone — sign in, work the app, and get your owner's approval before anything is paid."
-version: 2.1.3
+version: 2.1.4
 metadata: {"butler":{"moneyMoving":true,"keywords":["phone app","mobile app","in-app","android","cloud phone","errand","errands","place order","pay by card","card payment","zus","zus coffee","foodpanda","shopee","lazada","gojek","deliveroo","grabcar","grab car","grabmart","ride","ride hailing","e-hailing","taxi","book a ride","booking","groceries","log in","login","sign in","sign up","otp","sms code","verification code","2fa","captcha","bot wall","blocked"],"requires":{"bins":["app-checkout","bevo-sms","bevo-notify"]},"maxSteps":500}}
 ---
 
@@ -45,10 +45,13 @@ app-checkout end --reason "order placed"
 
 - **`screen` is your eyes**: one line per visible element, `x,y * label`,
   `*` meaning tappable. Pass the coordinates to `tap`; `swipe up` for more.
+  Labelled: `app-checkout tap --text "^Food$" && app-checkout screen`, not `do`.
 - **`tap --text` is a case-insensitive regex** matched anywhere in the label:
-  anchor it — `"^Allow$"` — or it also hits "Don't allow". `--nth` is 0-based.
-- **`type` goes to the focused field**: tap the field first; `--clear` when
-  it may already hold text.
+  anchor it — `"^Allow$"` — or it also hits "Don't allow"; escape
+  `? . ( ) +` — `"call you\?"`. `--nth` is 0-based.
+- **`type` goes to the focused field**: tap the input — its `*` line, never
+  its label, which leaves the cursor in the last field; `--clear` when it may
+  hold text. An error line shifts fields: `screen` again.
 - **No labels? Hand the navigation to `do`** (ZUS has none); never guess
   coordinates from a `shot`. Say where to go and what to bring back:
   `app-checkout do "open the menu, find Iced Latte, read its sizes and prices" --schema '{"type":"object","properties":{"sizes":{"type":"array","items":{"type":"string"}}}}'`.
@@ -78,15 +81,7 @@ app-checkout end --reason "order placed"
    isn't installed: `app-checkout install <package>`, then `open` 30 s later,
    twice at most — `open` can report success for an app that isn't there, so
    read its screen. Still the home screen: the provider's library lacks it —
-   stop retrying and get it from Huawei AppGallery (the phone has no Google
-   account, so Google Play cannot install). In Chrome, open
-   `https://appgallery.huawei.com`, search the app's name and open its page;
-   tap the address bar and `screen` — the address ends in the app id (`C`
-   and digits). Open `https://appgallery.cloud.huawei.com/appdl/<id>`, open
-   the download from Chrome's Downloads and install it, allowing installs
-   from Chrome if asked. No download: install AppGallery from the site's
-   button, open it, search the app and install it there. Never an APK mirror:
-   your owner's card may be typed into this app. Still missing: `end`.
+   stop retrying and follow `references/appgallery.md`. Never an APK mirror.
 4. [ADAPT] **Clear the way in**: a promo or tour
    (`tap --text "^(Skip|Not now|Later|Close)$"`), then `screen`; unlabelled,
    `key back` once, else `do "close the pop-ups and reach the app's home screen"`.
@@ -102,13 +97,18 @@ app-checkout end --reason "order placed"
    United States (+1) in the country picker, type the number without +1. Note
    the UTC time (`date -u +%FT%TZ`), tap "Send code" yourself, pass that time
    to `bevo-sms otp --since`, and `type` the code. Nothing arrives: resend
-   once with a fresh time, then stop. A new account asks for a name — give
-   your own. On an unlabelled sign-in screen, `do` may only read where the
-   fields and buttons are.
+   once with a fresh time, then stop. Your number already has an account:
+   log in — never a second one. A new account asks for a name and email —
+   yours (`acp email whoami --json`), never invented; no `acp`: ask. On an
+   unlabelled sign-in screen, `do` may only read where the fields and
+   buttons are.
 6. [ADAPT] **Do the errand in the app** — follow a loaded skill for this app
    if there is one, keeping every rule here; otherwise work it from
-   `screen`, with `do` where there are no labels. Browsing stops before the
-   basket: read what your owner asked about, `end`, and send it.
+   `screen`, with `do` where there are no labels. Find a shop with the app's
+   search, never by scrolling a feed; a chain: pick a branch off one list of
+   distances and open/closed states. Browsing
+   stops before the basket: read what your owner asked about, `end`, and
+   send it.
    `wait --text` between screens that load; `screen` again when a tap does
    not land.
 7. [FIXED] **Check the checkout.** The delivery address is your owner's. Pay
