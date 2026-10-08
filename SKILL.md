@@ -1,7 +1,7 @@
 ---
 name: butler-app-checkout
 description: "Run an errand inside a phone app on a cloud Android phone — sign in, work the app, and get your owner's approval before anything is paid."
-version: 2.1.4
+version: 2.1.5
 metadata: {"butler":{"moneyMoving":true,"keywords":["phone app","mobile app","in-app","android","cloud phone","errand","errands","place order","pay by card","card payment","zus","zus coffee","foodpanda","shopee","lazada","gojek","deliveroo","grabcar","grab car","grabmart","ride","ride hailing","e-hailing","taxi","book a ride","booking","groceries","log in","login","sign in","sign up","otp","sms code","verification code","2fa","captcha","bot wall","blocked"],"requires":{"bins":["app-checkout","bevo-sms","bevo-notify"]},"maxSteps":500}}
 ---
 
@@ -73,10 +73,12 @@ app-checkout end --reason "order placed"
    card when two or more are open.
 2. [FIXED] **Start the phone** with `--app`, `--country`, the street address
    on `--address` (for pickup, where your owner collects it) and a one-line
-   `--purpose`; `--lat`/`--lon` only if your owner gave coordinates. "still
-   starting": run the same line again. "GPS set to …" or "GPS set near …":
-   good. Address not found: the phone sits in the capital — type the address
-   into the app anyway, and say so if results look far.
+   `--purpose`; `--locale`: the language your owner writes in, with the
+   errand's country — `en-US`, `ja-JP`; `--lat`/`--lon` only if your owner
+   gave coordinates. "still starting": run the same line again. "GPS set to
+   …" or "GPS set near …": good. Address not found: the phone sits in the
+   capital — type the address into the app anyway, and say so if results
+   look far.
 3. [ADAPT] **Make sure the app opened.** `screen`. The home screen means it
    isn't installed: `app-checkout install <package>`, then `open` 30 s later,
    twice at most — `open` can report success for an app that isn't there, so
