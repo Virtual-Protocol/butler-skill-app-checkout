@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.1.5
+
+- **`start --locale`: the phone's language is your owner's.** Phones came up in
+  the exit country's own language — Malay for a Malaysian errand — because the
+  provider aligns the device to its IP. App labels, permission prompts and the
+  checkout total then read in a language the skill's steps and the owner may not
+  share. The butler now passes the language its owner writes in, with the
+  errand's country as the region (`en-US`, `ja-JP`); bevo-server switches the
+  phone to it when it boots, before the app opens, and defaults to English for
+  that country when none is given.
+- Needs `app-checkout` with `--locale` (virtuals-agent) and bevo-server's
+  `locale` on `POST /device-session`; list this version only once both are
+  deployed — an older `app-checkout` refuses the flag.
+
 ## 2.1.4
 
 Measured 2026-10-07 on a local butler ordering KOI Thé from GrabFood (Malaysia);
