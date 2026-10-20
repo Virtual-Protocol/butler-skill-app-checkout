@@ -35,6 +35,9 @@ merge here reaches butlers on the next hub build.
 - `references/appgallery.md` — installing an app the phone provider's library
   lacks, from Huawei AppGallery; published with `SKILL.md`, read only when step 3
   needs it
+- `references/commands.md` — every command's flags and limits (packages, `key`,
+  `swipe`, `wait`, `tap --text`, `do`); published with `SKILL.md`, read when a
+  flag is in doubt
 - `CHANGELOG.md` — one entry per version; every change bumps `version` in SKILL.md
 
 No `duty.py`, and the butler never files a duty for an app errand: each order

@@ -1,5 +1,36 @@
 # Changelog
 
+## 2.1.6
+
+From live GrabFood runs on staging and production (2026-10-13 to 10-15):
+
+- **Read all of `screen`.** Pop-ups and sheets come last in the list; trimming
+  with `head -20` hid Grab's address sheet, and the butler handed a 2-minute
+  detour to `do`. The `[input]` / `[x]` / `[ ]` marks are explained, and kept
+  out of `--text` patterns (a run tried `tap --text "^\[input\] …"`).
+- **Exact names by text.** Items, options and buttons are tapped with
+  `tap --text`, which re-reads the screen: coordinates from an earlier `screen`
+  missed twice when a menu moved.
+- **Rows under a floating bar.** A tap on an option row under Grab's floating
+  "Add to Basket" bar hit the bar: scroll it clear first.
+- **Install twice before AppGallery.** `install` silently didn't land on two
+  rentals and a second `install` worked within seconds; one run lost 18 minutes
+  to the AppGallery download instead.
+- **Kept phones.** With parked phones on, a rental may come back with the app
+  installed, signed in and the last address remembered — `screen` first.
+- **Ask once.** Open the item, then ask for every open choice in one question —
+  a run stopped three times for latte grade, milk and sugar, and delivery.
+- **Delivery speed.** Apps preselect the fastest, dearest option (Grab:
+  Priority RM5.50 vs Standard RM3.00): the butler now picks the standard one
+  unless the owner chose, and says so in the checkpoint.
+- **`references/commands.md`.** Flags and limits for every command (packages,
+  `key`, `swipe`, `wait`, the full `do --schema` example) moved out of SKILL.md
+  to keep it under the 12,000-character limit; the rules stay in SKILL.md.
+- **Never a bottom button by coordinates at checkout.** A run tapped Grab's
+  bottom button seven times around a "Review address" step — the button that
+  becomes Place order, with Cash preselected. Tap by label; stop after two taps
+  that do nothing.
+
 ## 2.1.5
 
 - **`start --locale`: the phone's language is your owner's.** Phones came up in
