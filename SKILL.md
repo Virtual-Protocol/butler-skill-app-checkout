@@ -63,15 +63,15 @@ limits: `references/commands.md`.
 - **`do` never orders, pays, signs in, or types a code or a card** — it stops
   short. It may read where a button or field is (`x`, `y` in the schema); the
   tap is then yours.
-- **`shot`** is for `describe_image`, to see where you are — never to pick a
-  point to tap.
+- **`shot`** + `describe_image` only when `screen` can't say where you are
+  — never to pick a point to tap or to check a choice.
 - **A permission prompt**: `tap --text "^(Allow|While using the app)$"`;
   unlabelled, `do "allow location for this app"`.
 
 1. [ADAPT] **Decide first, rent second.** Settle the app, what to get (item,
-   quantity, options) and where it goes — to them now, or an address — or
-   the pickup before `start` — not how they pay; that waits for the payment
-   screen. Ask once: one `ask_owner` card when two or more are open.
+   quantity, options), where it goes — to them now, or an address — or the
+   pickup, and cash or card, before `start` (card details wait for
+   payment). Ask once: one `ask_owner` card for all that are open.
 2. [FIXED] **Start the phone** with `--app`, `--country`, `--lat`/`--lon`
    or `--address` (for pickup, where your owner collects it) and a one-line
    `--purpose`; `--locale`: the language your owner writes in, with the
@@ -108,14 +108,13 @@ limits: `references/commands.md`.
    search, never by scrolling a feed; a chain: pick a branch off one list of
    distances and open/closed states. Browsing stops before the basket:
    `end`, and send what your owner asked about.
-   `wait --text` between screens that load; `screen` again when a tap does
-   not land. Open the item, then ask once for every open choice.
+   `wait --text "<a word of the next screen>"`, never `sleep`; `screen`
+   again when a tap does not land. Open the item, then ask once for every open choice.
 7. [FIXED] **Check the checkout.** The delivery address is your owner's.
    Apps preselect the fastest, dearest delivery: take the standard one unless
    your owner chose, and say which in the summary. Pay
-   by cash, else the method already on the account; neither, or your owner
-   asked to pay by card: ask for their card now (Paying by card) and enter it
-   before the checkpoint — never another card. Read the **final total**
+   as your owner chose: cash; or card — ask for it now (Paying by card) and
+   enter it before the checkpoint, never another card. Not offered: ask. Read the **final total**
    — after delivery, service, small-order and any tip — exactly as printed,
    with its currency: "RM 32.50" is `--amount 32.50 --currency MYR`. Never
    convert it. No labels: have `do` read the total, every fee, the address
