@@ -13,8 +13,10 @@ every money rule live here. A skill for one app declares this one in
 skill's app step tells the butler to follow such a skill when it is loaded.
 
 What it teaches the butler, in order: settle the errand with the owner before
-renting a phone (what to get, and the delivery or pickup address — the phone's
-GPS is set there with `start --address`); install an app the phone provider's
+renting a phone (what to get, and where it goes — the phone's GPS is set
+there: from the owner's own device with `request_location` and
+`start --lat/--lon` when it goes to where they are now, else from the street
+address with `start --address`); install an app the phone provider's
 library lacks from Huawei AppGallery through Chrome (the phone has no
 Google account for Google Play; never an APK mirror); sign up or sign in on its **own** number
 (`bevo-sms number`, codes from `bevo-sms otp`); work unlabelled screens through
@@ -51,7 +53,8 @@ forwarder to bevo-server's phone rental (`/butler-exec/device-session*` and
 `/butler-exec/app-action*`). bevo-server rents the phone — the provider key and the
 device id never reach the container, which holds only a numeric session id — and
 files every in-app order as an owner approval. The same command sets the phone's
-GPS from a street address (`start --address`, geocoded with OpenStreetMap),
+GPS from a street address (`start --address`, geocoded with OpenStreetMap) or
+from coordinates (`start --lat/--lon`),
 grants an app notifications ahead of time (`grant`; the provider refuses a
 location grant, so a location prompt is tapped), and hands navigation on a screen
 with no accessibility labels to the phone provider's own vision agent (`do`),
