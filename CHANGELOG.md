@@ -1,5 +1,37 @@
 # Changelog
 
+## 2.1.7
+
+From a GrabFood run on AWS staging (2026-10-28) that sent the phone to the
+wrong place: `start --address` found only "Kuala Lumpur", so the GPS sat at
+the city's middle, Grab made City Hall the delivery address and put it back
+at checkout — about 8 minutes of a 20-minute run (owner's call: "pass the
+location data from the app itself", with a clear rule for when).
+
+- **Where it goes, by one of two rules.** To where the owner is right now:
+  `request_location` (`precise`), and its coordinates on
+  `start --lat/--lon` — exact, no map lookup; the app's pin is the delivery
+  address, with a unit or floor asked for if it has none. Anywhere else (an
+  office, someone else, a home they are not at, later): the street address
+  on `start --address`, as before. No tool, a denial, or a fix worse than
+  100 m falls back to the street address. This replaces 2.0.0's "never pass
+  a `request_location` answer to a command"; the coordinates still go
+  nowhere but `--lat/--lon`.
+- **An app skill may ask how to pay first** (step 7): butler-grabfood
+  1.0.2 asks cash or card when Grab offers both. The default here is
+  unchanged, since not every app takes both.
+- **No `sleep`, few screenshots.** The run put `sleep 2–8` on most commands
+  and read 14 screenshots (4–23 s each): wait for a word of the next screen
+  (`wait --text`), and use `shot` only when `screen` can't say where you
+  are — never to check a choice.
+- **To fit the 12,000-character body**, four sentences said twice are said
+  once: a checkpoint claim keeping the phone alive (step 8 says it), `do` on
+  a sign-in screen (the `do` rule says it), browsing, and a second `do`.
+- **"GPS set only to the area …"** (app-checkout's new message when nothing
+  finer than a town matched) is handled like address-not-found: set the
+  address in the app and check it again at checkout, where Grab puts the
+  GPS spot back.
+
 ## 2.1.6
 
 From live GrabFood runs on staging and production (2026-10-13 to 10-15):

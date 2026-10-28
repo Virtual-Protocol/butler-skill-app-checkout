@@ -1,7 +1,7 @@
 ---
 name: butler-app-checkout
 description: "Run an errand inside a phone app on a cloud Android phone — sign in, work the app, and get your owner's approval before anything is paid."
-version: 2.1.6
+version: 2.1.7
 metadata: {"butler":{"moneyMoving":true,"keywords":["phone app","mobile app","in-app","android","cloud phone","errand","errands","place order","pay by card","card payment","zus","zus coffee","foodpanda","shopee","lazada","gojek","deliveroo","grabcar","grab car","grabmart","ride","ride hailing","e-hailing","taxi","book a ride","booking","groceries","log in","login","sign in","sign up","otp","sms code","verification code","2fa","captcha","bot wall","blocked"],"requires":{"bins":["app-checkout","bevo-sms","bevo-notify"]},"maxSteps":500}}
 ---
 
@@ -20,14 +20,17 @@ own approval.
 
 - **The phone runs on a clock.** A rental has a hard end — `start` and
   `status` print it — boot (about 90 s) included; six idle minutes release
-  it. Every `app-checkout` command keeps it alive, a checkpoint claim included.
+  it. Every `app-checkout` command keeps it alive.
 - **A rental may be your kept phone**: app installed, signed in, last address
   remembered — `screen` before installing or signing in.
 - **Every order asks your owner**, with no auto-approval. File the checkpoint
   with 10 minutes of the rental left at the latest, so they can answer.
-- **Where it goes**: your owner's street address, asked once, goes on
-  `start --address` (apps rank shops by the phone's GPS) and is typed into
-  the app. Never pass a `request_location` answer to a command.
+- **Where it goes** sets the phone's GPS (apps rank shops by it). To
+  where your owner is now ("to me", "here"): `request_location` `precise`,
+  its `latitude`/`longitude` on `start --lat --lon`, and the app's pin as the
+  address (ask a unit or floor). Elsewhere — or no tool, denied,
+  `accuracyM` over 100: the street address on `--address`, also typed into
+  the app. The coordinates go nowhere else.
 
 ## Procedure
 
@@ -60,22 +63,21 @@ limits: `references/commands.md`.
 - **`do` never orders, pays, signs in, or types a code or a card** — it stops
   short. It may read where a button or field is (`x`, `y` in the schema); the
   tap is then yours.
-- **`shot`** is for `describe_image`, to see where you are — never to pick a
-  point to tap.
+- **`shot`** only when `screen` can't say where you are — never to pick a
+  point to tap or check a choice.
 - **A permission prompt**: `tap --text "^(Allow|While using the app)$"`;
   unlabelled, `do "allow location for this app"`.
 
 1. [ADAPT] **Decide first, rent second.** Settle the app, what to get (item,
-   quantity, options) and the street address or pickup before `start` — not
-   how they pay; that waits for the payment screen. Ask once: one `ask_owner`
-   card when two or more are open.
-2. [FIXED] **Start the phone** with `--app`, `--country`, the street address
-   on `--address` (for pickup, where your owner collects it) and a one-line
+   quantity, options) and where it goes — to them now, or an address — or
+   the pickup before `start`; payment waits for checkout. Ask once:
+   one `ask_owner` card when two or more are open.
+2. [FIXED] **Start the phone** with `--app`, `--country`, `--lat`/`--lon`
+   or `--address` (for pickup, where your owner collects it) and a one-line
    `--purpose`; `--locale`: the language your owner writes in, with the
-   errand's country — `en-US`, `ja-JP`; `--lat`/`--lon` only if your owner
-   gave coordinates. "still starting": run the same line again. "GPS set to
-   …" or "GPS set near …": good. Address not found: the phone sits in the
-   capital — type the address into the app anyway, and say so if results
+   errand's country — `en-US`, `ja-JP`. "still starting": run the same line
+   again. "GPS set to/near …": good. "only to the area …" or not found: set
+   the address in the app, check it again at checkout, say so if results
    look far.
 3. [ADAPT] **Make sure the app opened.** `screen`. The home screen means it
    isn't installed: `app-checkout install <package>`, then `open` 30–45 s later
@@ -99,18 +101,15 @@ limits: `references/commands.md`.
    to `bevo-sms otp --since`, and `type` the code. Nothing arrives: resend
    once with a fresh time, then stop. Your number already has an account:
    log in — never a second one. A new account asks for a name and email —
-   yours (`acp email whoami --json`), never invented; no `acp`: ask. On an
-   unlabelled sign-in screen, `do` may only read where the fields and
-   buttons are.
+   yours (`acp email whoami --json`), never invented; no `acp`: ask.
 6. [ADAPT] **Do the errand in the app** — follow a loaded skill for this app
    if there is one, keeping every rule here; otherwise work it from
    `screen`, with `do` where there are no labels. Find a shop with the app's
    search, never by scrolling a feed; a chain: pick a branch off one list of
-   distances and open/closed states. Browsing
-   stops before the basket: read what your owner asked about, `end`, and
-   send it.
-   `wait --text` between screens that load; `screen` again when a tap does
-   not land. Open the item, then ask once for every open choice.
+   distances and open/closed states. Browsing stops before the basket:
+   `end`, and send what your owner asked about.
+   `wait --text "<next screen's word>"`, never `sleep`; `screen` again
+   when a tap does not land. Open the item, then ask once for every open choice.
 7. [FIXED] **Check the checkout.** The delivery address is your owner's.
    Apps preselect the fastest, dearest delivery: take the standard one unless
    your owner chose, and say which in the summary. Pay
@@ -186,8 +185,7 @@ limits: `references/commands.md`.
 - **"Outcome unknown"** from any command: `screen` and check; never resend.
 - Everything before the checkpoint is safe to redo. `no_match` or a timed-out
   `wait` usually means the label is off-screen: `swipe`, then `screen` —
-  never re-tap blind. A `do` still working: `do --task <id>`, never a second
-  `do`.
+  never re-tap blind. Never a second `do` while one is still working.
 
 ## Failure handling
 
