@@ -17,11 +17,9 @@ location data from the app itself", with a clear rule for when).
   100 m falls back to the street address. This replaces 2.0.0's "never pass
   a `request_location` answer to a command"; the coordinates still go
   nowhere but `--lat/--lon`.
-- **Cash or card, asked up front.** Step 1's one `ask_owner` card now asks
-  how they pay (owner's call, 2026-10-28: "ask owner for cash or card")
-  instead of the butler picking cash, else a saved method, at checkout. Card
-  details still wait for the payment screen; a choice the app doesn't offer
-  is asked about there.
+- **An app skill may ask how to pay first** (step 7): butler-grabfood
+  1.0.2 asks cash or card when Grab offers both. The default here is
+  unchanged, since not every app takes both.
 - **No `sleep`, few screenshots.** The run put `sleep 2–8` on most commands
   and read 14 screenshots (4–23 s each): wait for a word of the next screen
   (`wait --text`), and use `shot` only when `screen` can't say where you

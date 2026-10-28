@@ -25,7 +25,7 @@ own approval.
   remembered — `screen` before installing or signing in.
 - **Every order asks your owner**, with no auto-approval. File the checkpoint
   with 10 minutes of the rental left at the latest, so they can answer.
-- **Where it goes** sets the phone's GPS, which apps pick shops by. To
+- **Where it goes** sets the phone's GPS (apps rank shops by it). To
   where your owner is now ("to me", "here"): `request_location` `precise`,
   its `latitude`/`longitude` on `start --lat --lon`, and the app's pin as the
   address (ask a unit or floor). Elsewhere — or no tool, denied,
@@ -63,15 +63,15 @@ limits: `references/commands.md`.
 - **`do` never orders, pays, signs in, or types a code or a card** — it stops
   short. It may read where a button or field is (`x`, `y` in the schema); the
   tap is then yours.
-- **`shot`** + `describe_image` only when `screen` can't say where you are
-  — never to pick a point to tap or to check a choice.
+- **`shot`** only when `screen` can't say where you are — never to pick a
+  point to tap or check a choice.
 - **A permission prompt**: `tap --text "^(Allow|While using the app)$"`;
   unlabelled, `do "allow location for this app"`.
 
 1. [ADAPT] **Decide first, rent second.** Settle the app, what to get (item,
-   quantity, options), where it goes — to them now, or an address — or the
-   pickup, and cash or card, before `start` (card details wait for
-   payment). Ask once: one `ask_owner` card for all that are open.
+   quantity, options) and where it goes — to them now, or an address — or
+   the pickup before `start`; payment waits for checkout. Ask once:
+   one `ask_owner` card when two or more are open.
 2. [FIXED] **Start the phone** with `--app`, `--country`, `--lat`/`--lon`
    or `--address` (for pickup, where your owner collects it) and a one-line
    `--purpose`; `--locale`: the language your owner writes in, with the
@@ -108,13 +108,14 @@ limits: `references/commands.md`.
    search, never by scrolling a feed; a chain: pick a branch off one list of
    distances and open/closed states. Browsing stops before the basket:
    `end`, and send what your owner asked about.
-   `wait --text "<a word of the next screen>"`, never `sleep`; `screen`
-   again when a tap does not land. Open the item, then ask once for every open choice.
+   `wait --text "<next screen's word>"`, never `sleep`; `screen` again
+   when a tap does not land. Open the item, then ask once for every open choice.
 7. [FIXED] **Check the checkout.** The delivery address is your owner's.
    Apps preselect the fastest, dearest delivery: take the standard one unless
    your owner chose, and say which in the summary. Pay
-   as your owner chose: cash; or card — ask for it now (Paying by card) and
-   enter it before the checkpoint, never another card. Not offered: ask. Read the **final total**
+   by cash, else the method already on the account; neither, or your owner
+   asked to pay by card: ask for their card now (Paying by card) and enter it
+   before the checkpoint — never another card. Read the **final total**
    — after delivery, service, small-order and any tip — exactly as printed,
    with its currency: "RM 32.50" is `--amount 32.50 --currency MYR`. Never
    convert it. No labels: have `do` read the total, every fee, the address
