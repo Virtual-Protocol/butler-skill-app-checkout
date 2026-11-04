@@ -7,6 +7,11 @@
   `<x1> <y1> <x2> <y2> [--ms N]`. Swipe from mid-screen, not the bottom edge:
   apps float buttons there.
 - `wait --text "<regex>" [--timeout S]`: at most 100 s.
+- `hold [--minutes N]`: before you ask your owner something mid-errand — a
+  question ends your turn, and six idle minutes release the phone. Keeps it
+  up to N minutes (1–15, default 10), never past the rental's end; your next
+  command after their answer ends the hold. Not for an approval: the claim
+  keeps the phone alive itself. "cannot hold": ask anyway, briefly.
 - `tap --text "<regex>" [--nth N]`: case-insensitive, matched anywhere in the
   label — anchor it (`"^Allow$"`, or it also hits "Don't allow") and escape
   `? . ( ) +` (`"call you\?"`). `--nth` is 0-based.

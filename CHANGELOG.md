@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.1.8
+
+- **`app-checkout hold` before asking for a card.** A question ends the
+  butler's turn, and six idle minutes released a phone at checkout on staging
+  (2026-11-04). `hold` keeps it up to 15 minutes (default 10) while the owner
+  answers; the next command ends the hold. "The phone waits about five
+  minutes" is gone from the card ask. Release after virtuals-agent
+  `feat/app-checkout-hold` is live (an older `app-checkout` has no `hold`);
+  without bevo-server `feat/device-session-hold` it says it cannot hold, and
+  the ask goes ahead as before.
+- `references/commands.md`: `hold`.
+
 ## 2.1.7
 
 From a GrabFood run on AWS staging (2026-10-28) that sent the phone to the

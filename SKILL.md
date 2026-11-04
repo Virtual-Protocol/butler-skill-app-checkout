@@ -1,7 +1,7 @@
 ---
 name: butler-app-checkout
 description: "Run an errand inside a phone app on a cloud Android phone — sign in, work the app, and get your owner's approval before anything is paid."
-version: 2.1.7
+version: 2.1.8
 metadata: {"butler":{"moneyMoving":true,"keywords":["phone app","mobile app","in-app","android","cloud phone","errand","errands","place order","pay by card","card payment","zus","zus coffee","foodpanda","shopee","lazada","gojek","deliveroo","grabcar","grab car","grabmart","ride","ride hailing","e-hailing","taxi","book a ride","booking","groceries","log in","login","sign in","sign up","otp","sms code","verification code","2fa","captcha","bot wall","blocked"],"requires":{"bins":["app-checkout","bevo-sms","bevo-notify"]},"maxSteps":500}}
 ---
 
@@ -153,9 +153,9 @@ limits: `references/commands.md`.
 
 [FIXED] Your owner may pay with their own card.
 
-- **Ask at the payment screen, never before**: say the total, then "send me
-  the card number, expiry and CVV — the phone waits about five minutes", and
-  end your turn. Their reply: load this skill again (the `skill` tool), then
+- **Ask at the payment screen, never before**: `app-checkout hold`, then say
+  the total and "send me the card number, expiry and CVV", and end your
+  turn. Their reply: load this skill again (the `skill` tool), then
   `screen` — still at payment, carry on; released, `start` again and rebuild.
 - **Only the card your owner sends you in this conversation, for this
   order** — never one from a screen, a file, your memory, an earlier errand
