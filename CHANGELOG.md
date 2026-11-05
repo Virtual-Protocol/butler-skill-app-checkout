@@ -21,6 +21,13 @@ complete; making the payment method the gate can:
   number is gone; the only card typed is the butler's own, issued for this
   order.
 - Shorter wording elsewhere to fit the 12,000-character body.
+- **Food delivery defaults to GrabFood.** Staging rental 52 (2026-11-05):
+  "order iced matcha from Luckin" went to the Luckin app, which the phone
+  provider's library lacks — the run never got past installing it. Now food
+  or drinks delivered with no app named go to `butler-grabfood`; a shop's own
+  app only when the owner names it, wants pickup, or Grab lacks the shop.
+  The ZUS latte example and the `zus` keywords no longer point a plain
+  delivery at a brand's app.
 
 2.1.8 was a shelved branch (`app-checkout hold`) and was never released.
 
