@@ -5,7 +5,13 @@ the home screen twice. The phone has no Google account, so Google Play cannot
 install; get the app from Huawei AppGallery instead.
 
 1. In Chrome, open `https://appgallery.huawei.com`, search the app's name and
-   open its page.
+   open its page. Chrome's first run asks first: "Use without an account",
+   then "Got it".
+   **Only "Web View" on `screen`?** The page has no labels, so no
+   `wait --text` will ever match it — don't wait. One
+   `do "search <app name> on this page and open the app's page"`, then step 2.
+   `do` can't either: stop — `end`, tell your owner you couldn't get the app,
+   and for food or drinks offer GrabFood instead.
 2. Tap the address bar and `screen`: the address ends in the app id (`C` and
    digits).
 3. Open `https://appgallery.cloud.huawei.com/appdl/<id>`, open the download

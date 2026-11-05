@@ -28,6 +28,11 @@ complete; making the payment method the gate can:
   app only when the owner names it, wants pickup, or Grab lacks the shop.
   The ZUS latte example and the `zus` keywords no longer point a plain
   delivery at a brand's app.
+- **AppGallery that reads as "Web View"** (`references/appgallery.md`): in
+  rental 52 the AppGallery page showed only a "Web View" element and the
+  butler waited on text that could never appear. Now: no `wait` on it, one
+  `do` to search the page, else `end` and tell the owner (offer GrabFood for
+  food). Chrome's first-run screens are named so they don't cost a `wait`.
 
 2.1.8 was a shelved branch (`app-checkout hold`) and was never released.
 
