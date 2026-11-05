@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.1.9
+
+The card gate (owner's call, 2026-11-05). On a staging Luckin Coffee run a
+tap on Grab's "Cards" row landed under the floating Place Order bar and
+placed a real order — cash, so nothing stood in the way (cancelled; not
+charged). Detecting every app's order button on screen can't be made
+complete; making the payment method the gate can:
+
+- **Before approval, never Cash.** The selected method is the butler's last
+  card — spent, so it can't pay again — or none. Cash only if the owner asks
+  for it (then the checkpoint, as before).
+- **The butler's own card is the ask.** `acp card issue` (amount in US cents:
+  the total at today's rate +5%, rounded up to a whole dollar, $1–$75) files
+  the owner's approval; the checkpoint is skipped for card orders so the
+  order is not billed twice. Issued after approval, typed into the app's
+  card form, "save card" left on so the spent card stays the default; then
+  Place order once. A Rain card worked on Grab, checked by hand.
+- **No owner card from the chat.** "Paying by card" with the owner's card
+  number is gone; the only card typed is the butler's own, issued for this
+  order.
+- Shorter wording elsewhere to fit the 12,000-character body.
+
+2.1.8 was a shelved branch (`app-checkout hold`) and was never released.
+
 ## 2.1.7
 
 From a GrabFood run on AWS staging (2026-10-28) that sent the phone to the

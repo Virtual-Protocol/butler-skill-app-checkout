@@ -20,9 +20,10 @@ address with `start --address`); install an app the phone provider's
 library lacks from Huawei AppGallery through Chrome (the phone has no
 Google account for Google Play; never an APK mirror); sign up or sign in on its **own** number
 (`bevo-sms number`, codes from `bevo-sms otp`); work unlabelled screens through
-`do`; and pay the way the owner chooses — cash, a saved method, or the owner's
-own card, asked for only at the payment screen and typed only into that app's
-card form — after an approval the owner gives for every order.
+`do`; and pay behind a card gate — before the owner approves, nothing in the
+app can pay (never Cash; the butler's last card is spent): the butler's own
+virtual card (`acp card issue`) is the approval, issued for that order only
+and typed only into that app's card form. Cash only if the owner asks for it.
 
 One Butler skill, published by the
 [Butler skill hub](https://github.com/Virtual-Protocol/butler-skills): the hub's
